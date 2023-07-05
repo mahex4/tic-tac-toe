@@ -1,11 +1,12 @@
-import { FC, ReactNode } from 'react'
+import { FC } from 'react'
 import GridBox from './GridBox';
 
 interface IGridBox {
     handleClick: (position: number) => number
+    gameOver: boolean
 }
 
-const Grid: FC<IGridBox> = ({ handleClick }) => {
+const Grid: FC<IGridBox> = ({ handleClick, gameOver }) => {
     const rows = 3;
     const cols = 3;
     let cellIndex = 0
@@ -21,7 +22,7 @@ const Grid: FC<IGridBox> = ({ handleClick }) => {
                         {row.map((cell: any, colIndex: number) => {
                             cellIndex++;
                             return (
-                                <GridBox key={colIndex} cellId={cellIndex - 1} parseClick={handleClick} />
+                                <GridBox gameOver={gameOver} key={colIndex} cellId={cellIndex - 1} parseClick={handleClick} />
                             )
                         })}
                     </div>
