@@ -7,7 +7,7 @@ export const victoryCheck = (positions: number[]): boolean => {
         [6, 7, 8]
     ];
 
-    console.log(positions)
+    // console.log(positions)
 
     const isPresent = winScenarios.some(subarray => {
         if (positions.length < 3) return false
