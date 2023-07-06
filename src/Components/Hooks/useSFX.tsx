@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-
+import click1 from '../Click1.wav'
 
 interface SoundHook {
     soundUrl: string

@@ -48,9 +48,9 @@ const StyledBox = styled.div<StyledBoxProps>`
   }
 
   &:hover {
-    box-shadow: ${props => props.clicked ? 'none' : '4px 4px 0 #fff'};
+    box-shadow: ${props => props.clicked ? 'none' : '4px 4px 0 #6f6f6f'};
     transform: ${props => props.clicked ? 'translate(0px, 0px)' : 'translate(-4px, -4px)'};
-    background-color: #${props => props.clicked ? '' : '6f6f6f'};
+    background-color: #${props => props.clicked ? '' : 'fff'};
     color: white;
   }
 
@@ -69,11 +69,11 @@ const EmptyBox = styled.div`
 `
 
 
-const StyledImage = styled.img`
+const StyledImage = styled.img<{ opacity: number }>`
     margin: '10px';
     width: 8vw;
     height: 8vw;
-
+    opacity: ${props => props.opacity};
     
 `
 
@@ -114,8 +114,8 @@ const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOve
 
   const returnCurrent = () => {
     if (!hovered) return null
-    if (activity) return <StyledImage src={Ximg} />
-    else return <StyledImage src={Oimg} />
+    if (activity) return <StyledImage opacity={0.2} src={Ximg} />
+    else return <StyledImage opacity={0.2} src={Oimg} />
   }
 
   if (killed) {
@@ -134,7 +134,7 @@ const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOve
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {!clicked ? returnCurrent() : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
+        {!clicked ? returnCurrent() : xActive ? <StyledImage opacity={1} src={Ximg} /> : <StyledImage opacity={1} src={Oimg} />}
       </StyledBox>
     );
   }
