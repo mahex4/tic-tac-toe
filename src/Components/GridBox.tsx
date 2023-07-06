@@ -8,6 +8,7 @@ interface GridBoxProps {
   cellId: number
   gameOver: boolean
   reset: boolean
+  activity: boolean
 }
 
 const fadeOutAnimation = keyframes`
@@ -47,9 +48,9 @@ const StyledBox = styled.div<StyledBoxProps>`
   }
 
   &:hover {
-    box-shadow: ${props => props.clicked ? 'none' : '4px 4px 0 #fff'};
+    box-shadow: ${props => props.clicked ? 'none' : '4px 4px 0 #6f6f6f'};
     transform: ${props => props.clicked ? 'translate(0px, 0px)' : 'translate(-4px, -4px)'};
-    background-color: #${props => props.clicked ? '' : '6f6f6f'};
+    background-color: #${props => props.clicked ? '' : 'fff'};
     color: white;
   }
 
@@ -68,15 +69,15 @@ const EmptyBox = styled.div`
 `
 
 
-const StyledImage = styled.img`
+const StyledImage = styled.img<{ opacity: number }>`
     margin: '10px';
     width: 8vw;
     height: 8vw;
-
+    opacity: ${props => props.opacity};
     
 `
 
-const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false, reset = false }) => {
+const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOver = false, reset = false }) => {
   const [clicked, setClicked] = useState(false)
   const [xActive, setXActive] = useState(true)
   const [hovered, setHovered] = useState(false)
@@ -111,6 +112,12 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false,
     // useSoundEffect(Click1)
   }
 
+  const returnCurrent = () => {
+    if (!hovered) return null
+    if (activity) return <StyledImage opacity={0.2} src={Ximg} />
+    else return <StyledImage opacity={0.2} src={Oimg} />
+  }
+
   if (killed) {
     return (
       <StyledBox
@@ -127,7 +134,7 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false,
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {!clicked ? null : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
+        {!clicked ? returnCurrent() : xActive ? <StyledImage opacity={1} src={Ximg} /> : <StyledImage opacity={1} src={Oimg} />}
       </StyledBox>
     );
   }

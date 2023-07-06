@@ -39,7 +39,7 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver, reset, callD
     }
 
     return (
-        <Grid reset={reset} gameOver={gameOver} handleClick={handleClick} />
+        <Grid activity={xActive === 1} reset={reset} gameOver={gameOver} handleClick={handleClick} />
     )
 }
 

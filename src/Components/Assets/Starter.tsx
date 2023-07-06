@@ -25,10 +25,9 @@ export const StyledButton = styled.button<{ size: string }>`
   background-color: white;
 
   &:hover {
-    box-shadow: 4px 4px 0 #${props => props.size === 's' ? '000' : 'fff'};
+    box-shadow: 4px 4px 0 #${props => props.size === 's' ? '000' : '6f6f6f'};
     transform: translate(-4px, -4px);
-    background-color: #6f6f6f;
-    color: white;
+    background-color: #fff;
   }
 
   &:focus-visible {
@@ -37,9 +36,9 @@ export const StyledButton = styled.button<{ size: string }>`
 `;
 
 const Starter: FC<{ onClick: () => void }> = ({ onClick }) => {
-    return (
-        <StyledButton size='l' onClick={onClick}>Start Game</StyledButton>
-    )
+  return (
+    <StyledButton size='l' onClick={onClick}>Start Game</StyledButton>
+  )
 }
 
 export default Starter

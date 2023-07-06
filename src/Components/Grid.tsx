@@ -5,9 +5,10 @@ interface IGridBox {
     handleClick: (position: number) => Promise<number>
     gameOver: boolean
     reset: boolean
+    activity: boolean
 }
 
-const Grid: FC<IGridBox> = ({ handleClick, gameOver, reset }) => {
+const Grid: FC<IGridBox> = ({ activity, handleClick, gameOver, reset }) => {
     const rows = 3;
     const cols = 3;
     let cellIndex = 0
@@ -23,7 +24,7 @@ const Grid: FC<IGridBox> = ({ handleClick, gameOver, reset }) => {
                         {row.map((cell: any, colIndex: number) => {
                             cellIndex++;
                             return (
-                                <GridBox reset={reset} gameOver={gameOver} key={colIndex} cellId={cellIndex - 1} parseClick={handleClick} />
+                                <GridBox activity={activity} reset={reset} gameOver={gameOver} key={colIndex} cellId={cellIndex - 1} parseClick={handleClick} />
                             )
                         })}
                     </div>
