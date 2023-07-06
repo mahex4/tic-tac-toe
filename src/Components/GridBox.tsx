@@ -8,6 +8,7 @@ interface GridBoxProps {
   cellId: number
   gameOver: boolean
   reset: boolean
+  activity: boolean
 }
 
 const fadeOutAnimation = keyframes`
@@ -76,7 +77,7 @@ const StyledImage = styled.img`
     
 `
 
-const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false, reset = false }) => {
+const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOver = false, reset = false }) => {
   const [clicked, setClicked] = useState(false)
   const [xActive, setXActive] = useState(true)
   const [hovered, setHovered] = useState(false)
@@ -111,6 +112,12 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false,
     // useSoundEffect(Click1)
   }
 
+  const returnCurrent = () => {
+    if (!hovered) return null
+    if (activity) return <StyledImage src={Ximg} />
+    else return <StyledImage src={Oimg} />
+  }
+
   if (killed) {
     return (
       <StyledBox
@@ -127,7 +134,7 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false,
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {!clicked ? null : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
+        {!clicked ? returnCurrent() : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
       </StyledBox>
     );
   }
