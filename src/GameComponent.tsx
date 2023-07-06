@@ -12,7 +12,7 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver }) => {
     const xPositions = useRef<number[]>([]);
     const oPositions = useRef<number[]>([]);
 
-    const handleClick = (position: number) => {
+    const handleClick = async (position: number) => {
         setXActive(-1 * xActive)
         if (xActive > 0) xPositions.current.push(position)
         else oPositions.current.push(position)
@@ -21,7 +21,8 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver }) => {
         }
         else {
             if ((xActive && xPositions.current.length < 3) || (!xActive && oPositions.current.length < 3)) return xActive
-            callGameOver(xActive, victoryCheck(xActive > 0 ? xPositions.current : oPositions.current))
+            const victoryValue = await victoryCheck(xActive > 0 ? xPositions.current : oPositions.current)
+            callGameOver(xActive, victoryValue)
         }
         return xActive
     }

@@ -4,7 +4,7 @@ import Oimg from './Assets/Oimg.svg'
 import { keyframes, styled } from 'styled-components'
 
 interface GridBoxProps {
-    parseClick: (position: number) => number
+    parseClick: (position: number) => Promise<number>
     cellId: number
     gameOver: boolean
 }
@@ -53,6 +53,11 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false 
     const [isVisible, setIsVisible] = useState(true)
     const [killed, setKilled] = useState(false)
 
+    const setActivity = async () => {
+        const newVal = await parseClick(cellId) === 1
+        setXActive(newVal)
+    }
+
     useEffect(() => {
         console.log('running', gameOver)
         const timer = setTimeout(() => {
@@ -73,7 +78,7 @@ const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false 
                     setIsVisible(false)
                     if (clicked) return;
                     setClicked(true);
-                    setXActive(parseClick(cellId) === 1)
+                    setActivity()
                 }}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}

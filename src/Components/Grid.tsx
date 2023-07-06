@@ -2,7 +2,7 @@ import { FC } from 'react'
 import GridBox from './GridBox';
 
 interface IGridBox {
-    handleClick: (position: number) => number
+    handleClick: (position: number) => Promise<number>
     gameOver: boolean
 }
 
