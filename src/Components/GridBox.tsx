@@ -4,9 +4,10 @@ import Oimg from './Assets/Oimg.svg'
 import { keyframes, styled } from 'styled-components'
 
 interface GridBoxProps {
-    parseClick: (position: number) => Promise<number>
-    cellId: number
-    gameOver: boolean
+  parseClick: (position: number) => Promise<number>
+  cellId: number
+  gameOver: boolean
+  reset: boolean
 }
 
 const fadeOutAnimation = keyframes`
@@ -18,20 +19,50 @@ const fadeOutAnimation = keyframes`
   }
 `;
 
+interface StyledBoxProps {
+  hovered: boolean;
+  visibility: boolean;
+  clicked: boolean
+}
 
-const StyledBox = styled.div<{ hovered: boolean, visibility: boolean }>`
-  margin: 10px;
+const StyledBox = styled.div<StyledBoxProps>`
+  margin: 0.5vw;
   width: 10vw;
   height: 10vw;
-  background-color: ${(props) => props.hovered ? 'red' : 'wheat'};
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: ${(props) => (props.visibility ? fadeOutAnimation : 'none')} 0.3s ease-out;
+  animation: ${fadeOutAnimation} 0.3s ease-out;
+
+
+  @media screen and (min-width: 768px) and (orientation: landscape) {
+    width: 12vw;
+    height: 12vw;
+  }
+
+  @media screen and (max-width: 767px) and (orientation: portrait) {
+    width: 10vh;
+    height: 10vh;
+  }
+
+  &:hover {
+    box-shadow: ${props => props.clicked ? 'none' : '4px 4px 0 #fff'};
+    transform: ${props => props.clicked ? 'translate(0px, 0px)' : 'translate(-4px, -4px)'};
+    background-color: #${props => props.clicked ? '' : '6f6f6f'};
+    color: white;
+  }
+
+  &:focus-visible {
+    outline-offset: 1px;
+  }
+
+  margin-top: 10px;
+
 `
 
 const EmptyBox = styled.div`
-    margin: 10px;
+    margin: 0.5vw;
   width: 10vw;
   height: 10vw;
 `
@@ -45,49 +76,62 @@ const StyledImage = styled.img`
     
 `
 
-const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false }) => {
-    const [clicked, setClicked] = useState(false)
-    const [xActive, setXActive] = useState(true)
-    const [hovered, setHovered] = useState(false)
+const GridBox: React.FC<GridBoxProps> = ({ parseClick, cellId, gameOver = false, reset = false }) => {
+  const [clicked, setClicked] = useState(false)
+  const [xActive, setXActive] = useState(true)
+  const [hovered, setHovered] = useState(false)
 
-    const [isVisible, setIsVisible] = useState(true)
-    const [killed, setKilled] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [killed, setKilled] = useState(false)
 
-    const setActivity = async () => {
-        const newVal = await parseClick(cellId) === 1
-        setXActive(newVal)
+  const setActivity = async () => {
+    const newVal = await parseClick(cellId) === 1
+    setXActive(newVal)
+  }
+
+  useEffect(() => {
+    setClicked(false)
+    setXActive(true)
+    setHovered(false)
+    setIsVisible(true)
+    setKilled(false)
+  }, [reset])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setKilled(true)
+    }, 500 + cellId * 200)
+
+    return () => {
+      clearTimeout(timer)
     }
+  }, [cellId, gameOver, isVisible])
 
-    useEffect(() => {
-        console.log('running', gameOver)
-        const timer = setTimeout(() => {
-            setKilled(true)
-        }, 1000 + cellId * 200)
+  function playClick() {
+    // useSoundEffect(Click1)
+  }
 
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [cellId, gameOver, isVisible])
-
-    if (killed) {
-        return (
-            <StyledBox
-                visibility={isVisible}
-                hovered={hovered}
-                onClick={() => {
-                    setIsVisible(false)
-                    if (clicked) return;
-                    setClicked(true);
-                    setActivity()
-                }}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-            >
-                {!clicked ? null : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
-            </StyledBox>
-        );
-    }
-    else return (<EmptyBox />)
+  if (killed) {
+    return (
+      <StyledBox
+        visibility={isVisible}
+        hovered={hovered}
+        clicked={clicked}
+        onClick={() => {
+          playClick()
+          setIsVisible(false)
+          if (clicked) return;
+          setClicked(true);
+          setActivity()
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {!clicked ? null : xActive ? <StyledImage src={Ximg} /> : <StyledImage src={Oimg} />}
+      </StyledBox>
+    );
+  }
+  else return (<EmptyBox />)
 };
 
 export default GridBox

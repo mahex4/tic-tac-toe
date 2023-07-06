@@ -1,16 +1,26 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import Grid from './Components/Grid'
 import { checkDraw, victoryCheck } from './Components/VictoryChecker';
 
 interface GameCompProps {
     gameOver: boolean
     callGameOver: (xActive: number, win: boolean) => void
+    callDraw: () => void
+    reset: boolean
 }
 
-const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver }) => {
+
+const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver, reset, callDraw }) => {
     const [xActive, setXActive] = useState(1)
     const xPositions = useRef<number[]>([]);
     const oPositions = useRef<number[]>([]);
+
+    useEffect(() => {
+        if (!reset) return
+        setXActive(1)
+        xPositions.current.splice(0)
+        oPositions.current.splice(0)
+    }, [reset])
 
     const handleClick = async (position: number) => {
         setXActive(-1 * xActive)
@@ -18,6 +28,7 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver }) => {
         else oPositions.current.push(position)
         if (checkDraw(xPositions.current, oPositions.current)) {
             console.log('draw')
+            callDraw()
         }
         else {
             if ((xActive && xPositions.current.length < 3) || (!xActive && oPositions.current.length < 3)) return xActive
@@ -28,7 +39,7 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver }) => {
     }
 
     return (
-        <Grid gameOver={gameOver} handleClick={handleClick} />
+        <Grid reset={reset} gameOver={gameOver} handleClick={handleClick} />
     )
 }
 
