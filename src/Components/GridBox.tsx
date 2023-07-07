@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Ximg from './Assets/Ximg.svg'
 import Oimg from './Assets/Oimg.svg'
 import { keyframes, styled } from 'styled-components'
+import ReactAudioPlayer from 'react-audio-player'
 
 interface GridBoxProps {
   parseClick: (position: number) => Promise<number>
@@ -81,6 +82,7 @@ const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOve
   const [clicked, setClicked] = useState(false)
   const [xActive, setXActive] = useState(true)
   const [hovered, setHovered] = useState(false)
+  const [isPlaying, setPlaying] = useState(false);
 
   const [isVisible, setIsVisible] = useState(true)
   const [killed, setKilled] = useState(false)
@@ -97,6 +99,10 @@ const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOve
     setIsVisible(true)
     setKilled(false)
   }, [reset])
+
+  useEffect(() => {
+
+  })
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -120,22 +126,33 @@ const GridBox: React.FC<GridBoxProps> = ({ activity, parseClick, cellId, gameOve
 
   if (killed) {
     return (
-      <StyledBox
-        visibility={isVisible}
-        hovered={hovered}
-        clicked={clicked}
-        onClick={() => {
-          playClick()
-          setIsVisible(false)
-          if (clicked) return;
-          setClicked(true);
-          setActivity()
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {!clicked ? returnCurrent() : xActive ? <StyledImage opacity={1} src={Ximg} /> : <StyledImage opacity={1} src={Oimg} />}
-      </StyledBox>
+      <>
+        <StyledBox
+          visibility={isVisible}
+          hovered={hovered}
+          clicked={clicked}
+          onClick={() => {
+            playClick()
+            setIsVisible(false)
+            if (clicked) return;
+            setClicked(true);
+            setActivity()
+          }}
+          onMouseEnter={() => {
+            setPlaying(true)
+            setHovered(true)
+          }}
+          onMouseLeave={() => {
+            setPlaying(false)
+            setHovered(false)
+          }}
+        >
+          {!clicked ? returnCurrent() : xActive ? <StyledImage opacity={1} src={Ximg} /> : <StyledImage opacity={1} src={Oimg} />}
+        </StyledBox>
+        <div>
+          {isPlaying && !clicked ? <ReactAudioPlayer src={activity ? "./Click2.mp3" : "./Click1.wav"} autoPlay /> : null}
+        </div>
+      </>
     );
   }
   else return (<EmptyBox />)

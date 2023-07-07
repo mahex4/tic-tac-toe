@@ -8,7 +8,7 @@ export const victoryCheck = async (positions: number[]): Promise<boolean> => {
     const isPresent = await winScenarios.some(subarray => {
         if (positions.length < 3) return false
 
-        console.log(positions)
+        console.log("positions:", positions)
 
         if (positions.length === 3) {
             const elementCheck = positions.every(element => {
@@ -19,25 +19,36 @@ export const victoryCheck = async (positions: number[]): Promise<boolean> => {
         }
         else {
             const result = []
+            let resultConfirm = []
 
             for (let i = 0; i < positions.length; i++) {
                 const restArray = positions.filter((_, index) => index !== i);
                 result.push(restArray);
             }
 
+            if (positions.length === 5) {
+                for (let i = 0; i < result.length; i++) {
+                    const restArray = result[i].filter((_, index) => index !== i)
+                    console.log(restArray)
+                    resultConfirm.push(restArray)
+                }
+            }
+            else {
+                resultConfirm.push(result) // fixed TypeError here
+                console.log(resultConfirm)
+            }
+
             const checkedRes = result.some(elementBig => {
                 const checker = subarray.every(element => elementBig.includes(element));
-                console.log(checker, subarray, elementBig);
+                // console.log(checker, subarray, elementBig);
                 return checker;
             });
 
-
-
-            console.log(checkedRes)
+            // console.log(checkedRes)
             if (checkedRes) return checkedRes
         }
-    }
-    );
+    })
+
     console.log(isPresent)
 
     return isPresent;

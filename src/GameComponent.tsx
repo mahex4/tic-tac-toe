@@ -26,15 +26,21 @@ const GameComponent: FC<GameCompProps> = ({ gameOver, callGameOver, reset, callD
         setXActive(-1 * xActive)
         if (xActive > 0) xPositions.current.push(position)
         else oPositions.current.push(position)
-        if (checkDraw(xPositions.current, oPositions.current)) {
-            console.log('draw')
-            callDraw()
-        }
-        else {
-            if ((xActive && xPositions.current.length < 3) || (!xActive && oPositions.current.length < 3)) return xActive
-            const victoryValue = await victoryCheck(xActive > 0 ? xPositions.current : oPositions.current)
-            callGameOver(xActive, victoryValue)
-        }
+        // if (checkDraw(xPositions.current, oPositions.current)) {
+        //     console.log('draw')
+        //     callDraw()
+        // }
+        // else {
+        //     if ((xActive && xPositions.current.length < 3) || (!xActive && oPositions.current.length < 3)) return xActive
+        //     const victoryValue = await victoryCheck(xActive > 0 ? xPositions.current : oPositions.current)
+        //     console.log("victory", victoryValue)
+        //     callGameOver(xActive, victoryValue)
+        // }
+
+        // if ((xActive && xPositions.current.length < 3) || (!xActive && oPositions.current.length < 3)) return xActive
+        //     const victoryValue = await victoryCheck(xActive > 0 ? xPositions.current : oPositions.current)
+        //     console.log("victory", victoryValue)
+        //     callGameOver(xActive, victoryValue)
         return xActive
     }
 

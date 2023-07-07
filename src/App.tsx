@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import ReactAudioPlayer from 'react-audio-player';
 import { styled } from 'styled-components';
 import './App.css';
 import Starter from './Components/Assets/Starter';
@@ -65,6 +66,7 @@ function App() {
 
   return (
     <AppDiv>
+      {gameRemoved ? <ReactAudioPlayer src="./Success.mp3" autoPlay /> : null}
       {gameRemoved ? <VictoryScreen onClick={() => setReset(true)} winner={winner} /> : null}
       {startGame ?
         <GameHolder killed={gameOver}>
